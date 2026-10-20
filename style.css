@@ -1,0 +1,419 @@
+:root {
+    --fondo: #eef1f6;
+    --tarjeta: #ffffff;
+    --tinta: #121a2b;
+    --suave: #61708a;
+    --borde: #d6dde8;
+    --acento: #3b5bfd;
+    --acento-oscuro: #2a43d1;
+    --ok: #12a150;
+    --ok-fondo: #e6f6ed;
+    --aviso: #c97a00;
+    --aviso-fondo: #fff3de;
+    --error: #d6336c;
+    --error-fondo: #fde8ef;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 32px 16px 48px;
+    background: var(--fondo);
+    color: var(--tinta);
+    font-family: "Manrope", "Segoe UI", system-ui, sans-serif;
+    line-height: 1.5;
+}
+
+/* ---------- Cabecera ---------- */
+.cabecera {
+    max-width: 1080px;
+    margin: 0 auto 28px;
+}
+
+.cabecera h1 {
+    margin: 0 0 4px;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+}
+
+.cabecera p {
+    margin: 0;
+    color: var(--suave);
+}
+
+/* ---------- Rejilla (responsive) ---------- */
+.rejilla {
+    max-width: 1080px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 860px) {
+    .rejilla {
+        grid-template-columns: 1fr 1fr;
+        align-items: start;
+    }
+
+    .historial {
+        grid-column: 1 / -1;
+    }
+}
+
+/* ---------- Paneles ---------- */
+.panel {
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 16px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.panel-cab {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.panel h2 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 800;
+}
+
+/* ---------- Estado ---------- */
+.estado {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    background: var(--fondo);
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--suave);
+}
+
+.estado::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--suave);
+}
+
+.estado[data-activo="true"] {
+    color: var(--ok);
+    background: var(--ok-fondo);
+}
+
+.estado[data-activo="true"]::before {
+    background: var(--ok);
+}
+
+/* ---------- Visor (cámara o imagen) ---------- */
+#webcam-container {
+    width: min(100%, 420px);
+    aspect-ratio: 1 / 1;
+    margin-inline: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--fondo);
+    border: 2px dashed var(--borde);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+#webcam-container:empty::before {
+    content: "La cámara o la imagen aparecerá aquí";
+    padding: 0 24px;
+    text-align: center;
+    color: var(--suave);
+    font-size: 0.9rem;
+}
+
+#webcam-container:not(:empty) {
+    border: 2px solid var(--acento);
+}
+
+/* El canvas de la cámara se escala para llenar el visor */
+#webcam-container canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block;
+}
+
+/* La imagen subida se ve entera, sin recortar */
+#webcam-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+    background: #fff;
+}
+
+/* ---------- Botones ---------- */
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.btn {
+    padding: 11px 22px;
+    font: inherit;
+    font-weight: 600;
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.1s;
+}
+
+.btn.primario {
+    background: var(--acento);
+    color: #fff;
+}
+
+.btn.primario:hover:not(:disabled) {
+    background: var(--acento-oscuro);
+}
+
+.btn.secundario {
+    background: var(--tarjeta);
+    color: var(--tinta);
+    border-color: var(--borde);
+}
+
+.btn.secundario:hover:not(:disabled) {
+    border-color: var(--tinta);
+}
+
+.btn.pequeno {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+}
+
+.btn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+.btn:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+.btn:focus-visible,
+input:focus-visible {
+    outline: 3px solid var(--acento);
+    outline-offset: 2px;
+}
+
+@media (max-width: 480px) {
+    .acciones .btn {
+        flex: 1 1 100%;
+    }
+}
+
+/* ---------- Ajustes ---------- */
+.ajustes {
+    display: grid;
+    gap: 16px;
+    padding-top: 18px;
+    border-top: 1px solid var(--borde);
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.campo label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.campo output {
+    color: var(--acento);
+    font-variant-numeric: tabular-nums;
+}
+
+.campo small {
+    color: var(--suave);
+    font-size: 0.8rem;
+}
+
+.campo input[type="text"] {
+    padding: 10px 12px;
+    font: inherit;
+    border: 1.5px solid var(--borde);
+    border-radius: 10px;
+    background: var(--tarjeta);
+    color: var(--tinta);
+}
+
+.campo input[type="range"] {
+    width: 100%;
+    accent-color: var(--acento);
+}
+
+/* ---------- Mensaje de salida ---------- */
+#mensaje {
+    margin: 0;
+    padding: 14px 16px;
+    border-left: 5px solid var(--borde);
+    border-radius: 10px;
+    background: var(--fondo);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+#mensaje[data-tipo="ok"] {
+    background: var(--ok-fondo);
+    border-left-color: var(--ok);
+}
+
+#mensaje[data-tipo="aviso"] {
+    background: var(--aviso-fondo);
+    border-left-color: var(--aviso);
+}
+
+#mensaje[data-tipo="error"] {
+    background: var(--error-fondo);
+    border-left-color: var(--error);
+}
+
+/* ---------- Barras de probabilidad ---------- */
+#label-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.fila {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 12px;
+}
+
+.nombre {
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.valor {
+    font-variant-numeric: tabular-nums;
+    color: var(--suave);
+    font-weight: 600;
+}
+
+.barra {
+    grid-column: 1 / -1;
+    position: relative;
+    height: 10px;
+    background: var(--fondo);
+    border-radius: 999px;
+}
+
+.relleno {
+    height: 100%;
+    width: 0;
+    background: var(--acento);
+    border-radius: inherit;
+    transition: width 0.15s linear, background 0.15s;
+}
+
+/* Marca vertical que indica el valor mínimo */
+.barra::after {
+    content: "";
+    position: absolute;
+    top: -4px;
+    bottom: -4px;
+    left: var(--umbral, 80%);
+    width: 2px;
+    background: var(--tinta);
+    opacity: 0.45;
+}
+
+.fila.ganador .relleno {
+    background: var(--ok);
+}
+
+.fila.ganador .nombre,
+.fila.ganador .valor {
+    color: var(--ok);
+}
+
+/* ---------- Histórico ---------- */
+#historial {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    max-height: 320px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#historial li {
+    display: grid;
+    grid-template-columns: 1fr auto auto auto;
+    gap: 4px 16px;
+    align-items: center;
+    padding: 10px 4px;
+    border-bottom: 1px solid var(--borde);
+    font-size: 0.95rem;
+}
+
+#historial li:last-child {
+    border-bottom: none;
+}
+
+#historial .h-clase {
+    font-weight: 700;
+}
+
+#historial .h-pct {
+    color: var(--ok);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+#historial .h-origen,
+#historial .h-hora {
+    color: var(--suave);
+    font-size: 0.85rem;
+    font-variant-numeric: tabular-nums;
+}
+
+#historial li.vacio {
+    display: block;
+    color: var(--suave);
+    border-bottom: none;
+}
+
+@media (max-width: 560px) {
+    #historial li {
+        grid-template-columns: 1fr auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        transition: none !important;
+    }
+}

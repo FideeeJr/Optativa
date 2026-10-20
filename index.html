@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Clasificador de imágenes · Teachable Machine</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="cabecera">
+        <h1>Clasificador de imágenes</h1>
+        <p>Modelo entrenado con Teachable Machine. Usa la cámara o sube una foto.</p>
+    </header>
+
+    <main class="rejilla">
+
+        <!-- ENTRADA: cámara / imagen y ajustes -->
+        <section class="panel" aria-labelledby="t-entrada">
+            <div class="panel-cab">
+                <h2 id="t-entrada">Entrada</h2>
+                <span id="estado" class="estado" data-activo="false">Cámara apagada</span>
+            </div>
+
+            <div id="webcam-container"></div>
+
+            <div class="acciones">
+                <button id="btn-iniciar" class="btn primario" type="button">Iniciar cámara</button>
+                <button id="btn-parar" class="btn secundario" type="button" disabled>Parar</button>
+                <button id="btn-subir" class="btn secundario" type="button">Subir imagen</button>
+                <input id="archivo" type="file" accept="image/*" hidden>
+            </div>
+
+            <div class="ajustes">
+                <div class="campo">
+                    <label for="umbral">
+                        Valor mínimo de coincidencia
+                        <output id="umbral-valor" for="umbral">80%</output>
+                    </label>
+                    <input id="umbral" type="range" min="10" max="100" step="1" value="80">
+                </div>
+
+                <div class="campo">
+                    <label for="plantilla">Mensaje al detectar</label>
+                    <input id="plantilla" type="text" value="Es {clase} ({porcentaje}%)">
+                    <small>Puedes usar {clase} y {porcentaje}.</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- RESULTADO: mensaje + barras de probabilidad -->
+        <section class="panel" aria-labelledby="t-resultado">
+            <div class="panel-cab">
+                <h2 id="t-resultado">Resultado</h2>
+            </div>
+
+            <p id="mensaje" data-tipo="neutro" aria-live="polite">
+                Inicia la cámara o sube una imagen para empezar.
+            </p>
+
+            <div id="label-container"></div>
+        </section>
+
+        <!-- HISTORIAL -->
+        <section class="panel historial" aria-labelledby="t-historial">
+            <div class="panel-cab">
+                <h2 id="t-historial">Histórico</h2>
+                <button id="btn-borrar" class="btn secundario pequeno" type="button">Borrar histórico</button>
+            </div>
+            <ul id="historial"></ul>
+        </section>
+
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@latest/dist/teachablemachine-image.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
